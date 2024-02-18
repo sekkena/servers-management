@@ -16,7 +16,7 @@ Welcome to the Discord Servers Management Website. This project provides a web i
 
 2. Install Dependencies:
     ```bash
-    npm install```
+    npm install ```
 
 3. Configure Your Settings:
 - Create a .env file in the project root.
