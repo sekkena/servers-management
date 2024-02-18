@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Management - Vampire Studio</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      min-height: 100vh;
+      transition: background-color 0.3s;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: #333; /* Darkened title font color for better visibility */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .servers-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+      position: relative;
+      z-index: 0;
+    }
+
+    .server {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+      z-index: 1;
+    }
+
+    .server:hover {
+      transform: scale(1.05);
+    }
+
+    .server img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .server-details {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .server:hover .server-details {
+      display: block;
+    }
+
+    .leave-button {
+      background-color: #ff4d4d;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    .leave-button:hover {
+      background-color: #ff0000;
+    }
+
+    .invite-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    .invite-button:hover {
+      background-color: #45a049;
+    }
+
+    /* Dark Mode and Light Mode Toggle Styling */
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .toggle-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    /* Dark Mode Styling */
+    .dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .dark-mode .servers-container {
+      background-color: #333;
+    }
+
+    .dark-mode .server {
+      background-color: #555;
+      color: #fff;
+    }
+
+    .dark-mode .server-details {
+      background-color: rgba(0, 0, 0, 0.9);
+      color: #fff;
+    }
+
+    .dark-mode .leave-button,
+    .dark-mode .invite-button {
+      background-color: #777;
+    }
+
+    /* Footer Styling */
+    .footer {
+      text-align: center;
+      width: 100%;
+      color: #555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="toggle-container" onclick="toggleDarkMode()">
+    <span class="toggle-icon">🌜</span> 
+  </div>
+
+  <div class="header">Server Management</div>
+  <div class="servers-container">
+    <% servers.forEach((server) => { %>
+      <div class="server" data-id="<%= server.id %>">
+        <% if (server.iconURL) { %>
+          <img src="<%= server.iconURL %>" alt="<%= server.name %> Icon">
+        <% } else { %>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrGaVgQTXGMERLU1CHAWWG-OfM_u0WLg_AgZ3bUw5sjg&s" alt="Placeholder Icon">
+        <% } %>
+        <span><%= server.name %></span>
+        <div class="server-details">
+          <p><strong>Server Info:</strong></p>
+          <p>Owner ID: <%= server.ownerID %></p>
+          <p>Member Count: <%= server.memberCount %></p>
+          <button class="leave-button" onclick="leaveServer('<%= server.id %>')">Leave</button>
+          <button class="invite-button" onclick="showInvite('<%= server.id %>')">Invite</button>
+        </div>
+      </div>
+    <% }); %>
+
+    <div class="footer">
+      The Website Made By <a href="https://discord.gg/vms" target="_blank">Vampire Studio</a> @sekkena Copyrights 2024
+    </div>
+    
+  <script>
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      toggleIcon.textContent = body.classList.contains('dark-mode') ? '🌞' : '🌜';
+    }
+
+    function leaveServer(serverId) {
+      const confirmation = confirm('Are you sure you want to leave this server?');
+
+      if (confirmation) {
+        fetch(`/leave/${serverId}`, {
+          method: 'GET',
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log(`Bot left the server with ID: ${serverId}`);
+            // Remove the server element from the DOM after leaving
+            const serverElement = document.querySelector(`.server[data-id="${serverId}"]`);
+            serverElement.remove();
+          } else {
+            console.error(`Error leaving the server with ID ${serverId}: ${response.statusText}`);
+          }
+        })
+        .catch(error => {
+          console.error(`Error leaving the server with ID ${serverId}:`, error);
+        });
+      }
+    }
+    async function showInvite(serverId) {
+    try {
+        const inviteURL = await generateInviteURL(serverId);
+        copyToClipboard(inviteURL);
+        alert('Invite URL copied to clipboard!');
+    } catch (error) {
+        console.error('Error generating or copying invite URL:', error);
+        alert('Error generating or copying invite URL. See console for details.');
+    }
+}
+
+
+
+  async function generateInviteURL(serverId) {
+    try {
+      const response = await fetch(`/invite/${serverId}`);
+      if (response.ok) {
+        return response.text();
+      } else {
+        console.error(`Error generating invite URL: ${response.statusText}`);
+        throw new Error(`Error generating invite URL: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error generating invite URL:', error);
+      throw error;
+    }
+  }
+
+    function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
+
+  </script>
+</body>
+</html>
