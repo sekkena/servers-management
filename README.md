@@ -6,7 +6,7 @@ Welcome to the Discord Servers Management Website. This project provides a web i
 
 - View a list of Discord servers associated with the bot.
 - Leave Discord servers with a single click.
-- Copy invite URLs for easy server invites.
+- Copy Discord Servers invite URLs .
 
 ## Setup
 
