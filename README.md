@@ -16,14 +16,14 @@ Welcome to the Discord Servers Management Website. This project provides a web i
 
 2. Install Dependencies:
     ```bash
-    npm install ```
+    npm install 
 
 3. Configure Your Settings:
 - Create a .env file in the project root.
 - Add your Discord bot token and website port:
     ```env
     TOKEN=YOUR_DISCORD_BOT_TOKEN
-    PORT=YOUR_WEBSITE_PORT || If It Localhost use 3000```
+    PORT=YOUR_WEBSITE_PORT || If It Localhost use 3000
 
 
 ## Copyright 2024
