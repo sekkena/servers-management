@@ -26,4 +26,5 @@ Welcome to the Discord Servers Management Website. This project provides a web i
     PORT=YOUR_WEBSITE_PORT || If It Localhost use 3000```
 
 
-## Enjoy the enhanced Discord server management experience, courtesy of Vampire Studio and @sekkena. All rights reserved, Copyright 2024.
+## Copyright 2024
+ Enjoy the enhanced Discord server management experience, courtesy of Vampire Studio and @sekkena. All rights reserved, Copyright 2024.
