@@ -4,8 +4,8 @@ import express from 'express';
 import clipboardy from 'clipboardy';
 const client = new Client({ intents: 32767 });//All Intents
 ///Imp
-const TOKEN = process.env.TOKEN;
-const PORT = process.env.PORT;
+const TOKEN = process.env.TOKEN || `YOUR_DISCORD_BOT_TOKEN`;
+const PORT = process.env.PORT || `YOUR_PORT`;
 //Bot Ready
 client.once('ready', () => {
     console.log(colors.cyan(`[API] ${client.user.tag} Is Online, Running In ${client.guilds.cache.size}`))
@@ -86,9 +86,9 @@ app.listen(PORT, () => {
 });
 //Login
 client.login(TOKEN)
-    .catch(() => {
-        console.warn(colors.brightRed("[API] Token error at main.js"));
-    });
+    // .catch(() => {
+    //     console.warn(colors.brightRed("[API] Token error at main.js"));
+    // });
 
 
 //Copyrights vampire_sekkena 2024
